@@ -5,5 +5,13 @@ int main(int argc, char *args[]) {
     
     app.Setup();
 
-    while (app.IsRunn)
+    while (app.IsRunning()) {
+        app.Input();
+        app.Update();
+        app.Render();
+    }
+
+    app.Destroy();
+
+    return 0;
 }
