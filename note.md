@@ -186,3 +186,34 @@ struct Particle {
   ~Particle();
 }
 ```
+
+## Frame Rate
+waste some time if not yet reach target `MILLISECS_PER_FRAME`
+```cpp
+const int FPS = 60;
+const int MILLISECS_PER_FRAME = 1000 / FPS;
+//...
+
+int timeToWait = MILLISECS_PER_FRAME - (SDL_GetTicks() - timePreviousFrame);
+if (timeToWait > 0) {
+  SDL_Delay(timeToWait);
+}
+
+timePreviousFrame = SDL_GetTicks();
+// ...
+```
+
+Delta Time: difference between the current frame and last frame (in seconds)
+
+```cpp
+float deltaTime = (SDL_GetTicks() - timePerviousFrame) / 1000.0f;
+
+particle->velocity.x = 50.0 * deltaTime;
+...
+
+// if I want to move 50 px per second on x and 10 px per sec on y
+// not move how many px per frame
+```
+
+instead of thinking how many px we want to move **per frame**, we need to think how many px to move **per second**, this is because we want to have **frame rate independent movement**
+
