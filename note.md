@@ -166,3 +166,23 @@ v1.Scale(-1) ->  v1 = v1 * -1
 ```
 
 
+## Partical Physics
+- partical objects <-> rigid bodies
+- no shape, simple `point-mass` objects
+- newtonian mechanics, three laws of motion
+  - inertia: if no force is applied on an object, its velocity shall not change
+  - force, mass, acceleration: `F=ma`
+  - action and reaction
+
+```cpp
+struct Particle {
+  Vec2 position;
+  Vec2 velocity;
+  Vec2 acceleration;
+
+  float mass;
+
+  Particle(float x, float y, float mass);
+  ~Particle();
+}
+```
