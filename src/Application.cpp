@@ -9,6 +9,8 @@ bool Application::IsRunning() {
 void Application::Setup() {
     running = Graphics::OpenWindow();
     particle = new Particle(50, 100, 1.0);
+    particle->radius = 15;
+    particle->velocity.x = 400;
 }
 
 
@@ -45,13 +47,31 @@ void Application::Update() {
     timePreviousFrame = SDL_GetTicks();
 
     // Update objects in the scene
-    particle->velocity = Vec2(100.0 * deltaTime, 30.0 * deltaTime);
-    particle->position += particle->velocity;
+    particle->acceleration = Vec2(0.0, 9.8 * PIXELS_PER_METER);
+
+    particle->velocity += particle->acceleration * deltaTime;
+    particle->position += particle->velocity * deltaTime;
+
+    // TOOD:
+    // check particle position, limit and keep the particle inside of window...
+    // 
+    if (
+        particle->position.x + particle->radius >= Graphics::Width() ||
+        particle->position.x - particle->radius <=0
+    ) {
+        particle->velocity.x *= -1;
+    }
+    if (
+        particle->position.y + particle->radius >= Graphics::Height() ||
+        particle->position.y - particle->radius <= 0
+    ) {
+        particle->velocity.y *= -1;
+    }
 }
 
 void Application::Render() {
     Graphics::ClearScreen(0xFF056263);  // transparency R G B
-    Graphics::DrawFillCircle(particle->position.x, particle->position.y, 4, 0xFFFFFFFF);
+    Graphics::DrawFillCircle(particle->position.x, particle->position.y, particle->radius, 0xFFFFFFFF);
     Graphics::RenderFrame();
 }
 
