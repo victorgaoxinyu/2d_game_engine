@@ -8,8 +8,14 @@ bool Application::IsRunning() {
 
 void Application::Setup() {
     running = Graphics::OpenWindow();
-    particle = new Particle(50, 100, 1.0);
-    particle->radius = 15;
+    
+    Particle* smallBall = new Particle(50, 100, 1.0);
+    smallBall->radius = 10;
+    particles.push_back(smallBall);
+
+    Particle* bigBall = new Particle(50, 200, 3.0);
+    bigBall->radius = 30;
+    particles.push_back(bigBall);
 }
 
 
@@ -47,36 +53,47 @@ void Application::Update() {
 
     // Apply a wind force
     Vec2 wind = Vec2(0.2 * PIXELS_PER_METER, 0.0);
-    particle->AddForce(wind);
+    // particle->AddForce(wind);
+    for (auto particle: particles) {
+        particle->AddForce(wind);
+        particle->Integrate(deltaTime);
     
-    particle->Integrate(deltaTime);
+    // // Apply gravity
+    // Vec2 gravity = Vec2(0.0, particle->mass * 9.8);
+    // particle->AddForce(gravity);
+    
+    // particle->Integrate(deltaTime);
  
     // TOOD:
     // check particle position, limit and keep the particle inside of window...
     // 
-    if (
-        particle->position.x + particle->radius >= Graphics::Width() ||
-        particle->position.x - particle->radius <=0
-    ) {
-        particle->velocity.x *= -1;  // change to 0.9 to represent energy lost during collision
-    }
-    if (
-        particle->position.y + particle->radius >= Graphics::Height() ||
-        particle->position.y - particle->radius <= 0
-    ) {
-        particle->velocity.y *= -1;
+        if (
+            particle->position.x + particle->radius >= Graphics::Width() ||
+            particle->position.x - particle->radius <=0
+        ) {
+            particle->velocity.x *= -1;  // change to 0.9 to represent energy lost during collision
+        }
+        if (
+            particle->position.y + particle->radius >= Graphics::Height() ||
+            particle->position.y - particle->radius <= 0
+        ) {
+            particle->velocity.y *= -1;
+        }
     }
 }
 
 void Application::Render() {
     Graphics::ClearScreen(0xFF056263);  // transparency R G B
-    Graphics::DrawFillCircle(particle->position.x, particle->position.y, particle->radius, 0xFFFFFFFF);
+    for (auto particle: particles) {
+        Graphics::DrawFillCircle(particle->position.x, particle->position.y, particle->radius, 0xFFFFFFFF);
+    }
     Graphics::RenderFrame();
 }
 
 
 void Application::Destroy() {
-    // TOOD: destroy all objs
-    delete particle;
+    for (auto particle: particles) {
+        delete particle;
+    }
     Graphics::CloseWindow();
 }
