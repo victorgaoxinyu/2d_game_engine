@@ -5,7 +5,7 @@
 
 struct Particle {
     int radius;
-    
+
     Vec2 position;
     Vec2 velocity;
     Vec2 acceleration;
@@ -13,6 +13,8 @@ struct Particle {
     float mass;       // unit?
     Particle(float x, float y, float mass);
     ~Particle();
+
+    void Integrate(float dt);
 };
 
 #endif

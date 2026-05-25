@@ -10,7 +10,6 @@ void Application::Setup() {
     running = Graphics::OpenWindow();
     particle = new Particle(50, 100, 1.0);
     particle->radius = 15;
-    particle->velocity.x = 400;
 }
 
 
@@ -47,11 +46,10 @@ void Application::Update() {
     timePreviousFrame = SDL_GetTicks();
 
     // Update objects in the scene
-    particle->acceleration = Vec2(0.0, 9.8 * PIXELS_PER_METER);
+    particle->acceleration = Vec2(2.0 * PIXELS_PER_METER, 9.8 * PIXELS_PER_METER);
 
-    particle->velocity += particle->acceleration * deltaTime;
-    particle->position += particle->velocity * deltaTime;
-
+    particle->Integrate(deltaTime);
+ 
     // TOOD:
     // check particle position, limit and keep the particle inside of window...
     // 
@@ -59,7 +57,7 @@ void Application::Update() {
         particle->position.x + particle->radius >= Graphics::Width() ||
         particle->position.x - particle->radius <=0
     ) {
-        particle->velocity.x *= -1;
+        particle->velocity.x *= -1;  // change to 0.9 to represent energy lost during collision
     }
     if (
         particle->position.y + particle->radius >= Graphics::Height() ||

@@ -217,3 +217,22 @@ particle->velocity.x = 50.0 * deltaTime;
 
 instead of thinking how many px we want to move **per frame**, we need to think how many px to move **per second**, this is because we want to have **frame rate independent movement**
 
+## Simulation movement
+- physics software simulation works by making several small predictions
+- using mathematicall technique called **integration**
+- the smaller the delta-time, the better will be our prediction
+
+`v = dp/dt`, the derivative of position is velocity
+
+`a = dv/dt`, the derivative of velocity is acceleration
+
+### Numerical integration
+- Euler integration is the most basic technique
+  - accuracy is "good enough" for most game apps
+  - drawback is requires solving a system of equations per time-step
+- Verlet integration 
+  - better accuracy, less memory usage when simulating large number of particles
+- Runge-kutta integration
+  - a family of integrators
+  -  RK4 is the most popular implementation
+  -  accumulates error is on the order of the 4th derivative, very accurate`
