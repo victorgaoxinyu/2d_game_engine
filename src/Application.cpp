@@ -45,9 +45,10 @@ void Application::Update() {
         // Set time of current frame to be used in next iter
     timePreviousFrame = SDL_GetTicks();
 
-    // Update objects in the scene
-    particle->acceleration = Vec2(2.0 * PIXELS_PER_METER, 9.8 * PIXELS_PER_METER);
-
+    // Apply a wind force
+    Vec2 wind = Vec2(0.2 * PIXELS_PER_METER, 0.0);
+    particle->AddForce(wind);
+    
     particle->Integrate(deltaTime);
  
     // TOOD:

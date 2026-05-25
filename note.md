@@ -236,3 +236,28 @@ instead of thinking how many px we want to move **per frame**, we need to think 
   - a family of integrators
   -  RK4 is the most popular implementation
   -  accumulates error is on the order of the 4th derivative, very accurate`
+
+## Force
+`F = ma`
+
+```cpp
+// -> Apply a wind force to the right
+Vec2 wind = Vec2(2.0, 0.0);
+particle->AddForce(wind);
+...
+particle->Integrate(deltaTime);
+```
+
+```cpp
+void Particle::AddForce(const Vec2& force) {
+  sumForces += force;
+}
+
+void Particle::Integrate(float dt) {
+  acceleration = sumForces / mass;
+  velocity += acceleration * dt;
+  position += velocity * dt;
+
+  ClearForces();  // clear the sumForces for next frame/step
+}
+```
