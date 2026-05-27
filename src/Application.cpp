@@ -13,7 +13,7 @@ void Application::Setup() {
     smallBall->radius = 10;
     particles.push_back(smallBall);
 
-    Particle* bigBall = new Particle(50, 200, 3.0);
+    Particle* bigBall = new Particle(100, 100, 3.0);
     bigBall->radius = 30;
     particles.push_back(bigBall);
 }
@@ -52,10 +52,14 @@ void Application::Update() {
     timePreviousFrame = SDL_GetTicks();
 
     // Apply a wind force
-    Vec2 wind = Vec2(0.2 * PIXELS_PER_METER, 0.0);
+    Vec2 wind = Vec2(0.0 * PIXELS_PER_METER, 0.0);
     // particle->AddForce(wind);
     for (auto particle: particles) {
         particle->AddForce(wind);
+
+        Vec2 weight = Vec2(0.0, 9.8 * particle->mass);
+        particle->AddForce(weight);
+    
         particle->Integrate(deltaTime);
     
     // // Apply gravity

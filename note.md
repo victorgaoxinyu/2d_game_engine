@@ -261,3 +261,7 @@ void Particle::Integrate(float dt) {
   ClearForces();  // clear the sumForces for next frame/step
 }
 ```
+
+### Inverse of Mass
+- Most physic engine store inverse of Mass instead of Mass
+- most operation requires `/mass` , and `* invMass` will be cheaper
