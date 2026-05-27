@@ -29,6 +29,24 @@ void Application::Input() {
             case SDL_KEYDOWN:
                 if (event.key.keysym.sym == SDLK_ESCAPE)
                     running = false;
+                if (event.key.keysym.sym == SDLK_UP)
+                    pushForce.y = -50 * PIXELS_PER_METER;
+                if (event.key.keysym.sym == SDLK_DOWN)
+                    pushForce.y = 50 * PIXELS_PER_METER;
+                if (event.key.keysym.sym == SDLK_LEFT)
+                    pushForce.x = -50 * PIXELS_PER_METER;
+                if (event.key.keysym.sym == SDLK_RIGHT)
+                    pushForce.x = 50 * PIXELS_PER_METER;
+                break;
+            case SDL_KEYUP:
+                if (event.key.keysym.sym == SDLK_UP)
+                    pushForce.y = 0;
+                if (event.key.keysym.sym == SDLK_DOWN)
+                    pushForce.y = 0;
+                if (event.key.keysym.sym == SDLK_LEFT)
+                    pushForce.x = 0;
+                if (event.key.keysym.sym == SDLK_RIGHT)
+                    pushForce.x = 0;
                 break;
         }
     }
@@ -53,20 +71,20 @@ void Application::Update() {
 
     // Apply a wind force
     Vec2 wind = Vec2(0.0 * PIXELS_PER_METER, 0.0);
-    // particle->AddForce(wind);
+
     for (auto particle: particles) {
+        // Add winoForce
         particle->AddForce(wind);
 
-        Vec2 weight = Vec2(0.0, 9.8 * particle->mass);
+        // Add weight
+        Vec2 weight = Vec2(0.0, 9.8 * particle->mass * PIXELS_PER_METER);
         particle->AddForce(weight);
     
+        // Add pushForce
+        particle->AddForce(pushForce);
+
         particle->Integrate(deltaTime);
     
-    // // Apply gravity
-    // Vec2 gravity = Vec2(0.0, particle->mass * 9.8);
-    // particle->AddForce(gravity);
-    
-    // particle->Integrate(deltaTime);
  
     // TOOD:
     // check particle position, limit and keep the particle inside of window...
