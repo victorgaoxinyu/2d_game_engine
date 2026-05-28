@@ -265,3 +265,12 @@ void Particle::Integrate(float dt) {
 ### Inverse of Mass
 - Most physic engine store inverse of Mass instead of Mass
 - most operation requires `/mass` , and `* invMass` will be cheaper
+
+### Drag Force
+- acting in the opposite direction of the relative motion with respect to surrounding fluid
+- depends on velocity
+
+```
+Fdrag = 1/2 * fluid density * coefficient drag * cross-sectional area * velocity^2 * inverse of the velocity direction
+
+```
