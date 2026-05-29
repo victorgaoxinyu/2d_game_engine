@@ -14,10 +14,10 @@ void Application::Setup() {
     smallBall->radius = 10;
     particles.push_back(smallBall);
 
-    liquid.x = 0;
-    liquid.y = Graphics::Height() / 2;
-    liquid.w = Graphics::Width();
-    liquid.h = Graphics::Height() / 2;
+    // liquid.x = 0;
+    // liquid.y = Graphics::Height() / 2;
+    // liquid.w = Graphics::Width();
+    // liquid.h = Graphics::Height() / 2;
 }
 
 
@@ -82,33 +82,30 @@ void Application::Update() {
 
     for (auto particle: particles) {
         // Add weight
-        Vec2 weight = Vec2(0.0, 9.8 * particle->mass * PIXELS_PER_METER);
-        particle->AddForce(weight);
+        // Vec2 weight = Vec2(0.0, 9.8 * particle->mass * PIXELS_PER_METER);
+        // particle->AddForce(weight);
     
         // Add pushForce
         particle->AddForce(pushForce);
 
-        // TODO: apply dragForce if inside of liquid
-        if (particle->position.y >= liquid.y) {
-            Vec2 drag = Force::GenerateDragForce(*particle, 0.03);
-            particle->AddForce(drag);
-            // std::cout
-            //     << "velY: " << particle->velocity.y
-            //     << " dragY: " << drag.y
-            //     << " gravityY: " << weight.y
-            //     << std::endl;
-        } else {
-            // Add windForce
-            Vec2 wind = Vec2(1.0 * PIXELS_PER_METER, 0.0);
-            particle->AddForce(wind);
-        }
+        // Add frictionForce
+        Vec2 friction = Force::GenerateFrictionForce(*particle, 10.0 * PIXELS_PER_METER);
+        particle->AddForce(friction);
+
+        // // apply dragForce if inside of liquid
+        // if (particle->position.y >= liquid.y) {
+        //     Vec2 drag = Force::GenerateDragForce(*particle, 0.03);
+        //     particle->AddForce(drag);
+        // } else {
+        //     // Add windForce
+        //     Vec2 wind = Vec2(1.0 * PIXELS_PER_METER, 0.0);
+        //     particle->AddForce(wind);
+        // }
 
         particle->Integrate(deltaTime);
     
  
-    // TOOD:
     // check particle position, limit and keep the particle inside of window...
-    // 
         if (particle->position.x - particle->radius <= 0) {
             particle->position.x = particle->radius;
             particle->velocity.x *= -0.9;  // 0.9 for energy loss
