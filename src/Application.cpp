@@ -14,10 +14,6 @@ void Application::Setup() {
     smallBall->radius = 10;
     particles.push_back(smallBall);
 
-    // Particle* bigBall = new Particle(100, 100, 3.0);
-    // bigBall->radius = 30;
-    // particles.push_back(bigBall);
-
     liquid.x = 0;
     liquid.y = Graphics::Height() / 2;
     liquid.w = Graphics::Width();
@@ -54,6 +50,13 @@ void Application::Input() {
                 if (event.key.keysym.sym == SDLK_RIGHT)
                     pushForce.x = 0;
                 break;
+            case SDL_MOUSEBUTTONDOWN:
+                if (event.button.button == SDL_BUTTON_LEFT) {
+                    Particle* ball = new Particle(event.button.x, event.button.y, 1);
+                    ball->radius = 5;
+                    particles.push_back(ball);
+                };
+                break;
         }
     }
 }
@@ -78,26 +81,26 @@ void Application::Update() {
     // Apply forces to the particles
 
     for (auto particle: particles) {
-        // Add windForce
-        // Vec2 wind = Vec2(1.0 * PIXELS_PER_METER, 0.0);
-        // particle->AddForce(wind);
-
         // Add weight
         Vec2 weight = Vec2(0.0, 9.8 * particle->mass * PIXELS_PER_METER);
         particle->AddForce(weight);
     
         // Add pushForce
-        // particle->AddForce(pushForce);
+        particle->AddForce(pushForce);
 
         // TODO: apply dragForce if inside of liquid
         if (particle->position.y >= liquid.y) {
             Vec2 drag = Force::GenerateDragForce(*particle, 0.03);
             particle->AddForce(drag);
-            std::cout
-                << "velY: " << particle->velocity.y
-                << " dragY: " << drag.y
-                << " gravityY: " << weight.y
-                << std::endl;
+            // std::cout
+            //     << "velY: " << particle->velocity.y
+            //     << " dragY: " << drag.y
+            //     << " gravityY: " << weight.y
+            //     << std::endl;
+        } else {
+            // Add windForce
+            Vec2 wind = Vec2(1.0 * PIXELS_PER_METER, 0.0);
+            particle->AddForce(wind);
         }
 
         particle->Integrate(deltaTime);
