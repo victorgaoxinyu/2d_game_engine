@@ -91,7 +91,7 @@ void Application::Update() {
 
         // TODO: apply dragForce if inside of liquid
         if (particle->position.y >= liquid.y) {
-            Vec2 drag = Force::GenerateDragForce(*particle, 0.00001);
+            Vec2 drag = Force::GenerateDragForce(*particle, 0.03);
             particle->AddForce(drag);
             std::cout
                 << "velY: " << particle->velocity.y

@@ -28,4 +28,5 @@ void Particle::Integrate(float dt) {
     acceleration = sumForces * invMass;
     velocity += acceleration * dt;
     position += velocity * dt;
+    ClearForces();
 }
