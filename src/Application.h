@@ -8,9 +8,11 @@
 class Application {
     private: 
         bool running = false;
+        bool leftMouseButtonDown = false;
         
         std::vector<Particle*> particles;
         Vec2 pushForce = Vec2(0, 0);
+        Vec2 mouseCursor;
 
         // TODO: create a fluid
         SDL_Rect liquid;

@@ -50,12 +50,34 @@ void Application::Input() {
                 if (event.key.keysym.sym == SDLK_RIGHT)
                     pushForce.x = 0;
                 break;
+            // Click to create more balls
+            // case SDL_MOUSEBUTTONDOWN:
+            //     if (event.button.button == SDL_BUTTON_LEFT) {
+            //         Particle* ball = new Particle(event.button.x, event.button.y, 1);
+            //         ball->radius = 5;
+            //         particles.push_back(ball);
+            //     };
+            //     break;
+            case SDL_MOUSEMOTION:
+                mouseCursor.x = event.motion.x;
+                mouseCursor.y = event.motion.y;
+                break;
             case SDL_MOUSEBUTTONDOWN:
-                if (event.button.button == SDL_BUTTON_LEFT) {
-                    Particle* ball = new Particle(event.button.x, event.button.y, 1);
-                    ball->radius = 5;
-                    particles.push_back(ball);
-                };
+                if (!leftMouseButtonDown && event.button.button == SDL_BUTTON_LEFT) {
+                    leftMouseButtonDown = true;
+                    int x, y;
+                    SDL_GetMouseState(&x, &y);
+                    mouseCursor.x = x;
+                    mouseCursor.y = y;
+                }
+                break;
+            case SDL_MOUSEBUTTONUP:
+                if (leftMouseButtonDown && event.button.button == SDL_BUTTON_LEFT) {
+                    leftMouseButtonDown = false;
+                    Vec2 impulseDirection = (particles[0]->position - mouseCursor).UnitVector();
+                    float impulseMagnitude = (particles[0]->position - mouseCursor).Magnitude() * 5.0;
+                    particles[0]->velocity = impulseDirection * impulseMagnitude;
+                }
                 break;
         }
     }
@@ -85,8 +107,8 @@ void Application::Update() {
         // Vec2 weight = Vec2(0.0, 9.8 * particle->mass * PIXELS_PER_METER);
         // particle->AddForce(weight);
     
-        // Add pushForce
-        particle->AddForce(pushForce);
+        // // Add pushForce
+        // particle->AddForce(pushForce);
 
         // Add frictionForce
         Vec2 friction = Force::GenerateFrictionForce(*particle, 10.0 * PIXELS_PER_METER);
@@ -127,7 +149,9 @@ void Application::Render() {
 
     // Draw the liquid, x, y here is the center of DrawFillRect :P
     Graphics::DrawFillRect(liquid.x + liquid.w / 2, liquid.y + liquid.h / 2, liquid.w, liquid.h, 0xFFF56042);
-
+    if (leftMouseButtonDown == true) {
+        Graphics::DrawLine(particles[0]->position.x, particles[0]->position.y, mouseCursor.x, mouseCursor.y, 0xFF4254F5);
+    }
     for (auto particle: particles) {
         Graphics::DrawFillCircle(particle->position.x, particle->position.y, particle->radius, 0xFFFFFFFF);
     }
