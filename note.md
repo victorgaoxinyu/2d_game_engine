@@ -274,3 +274,12 @@ void Particle::Integrate(float dt) {
 Fdrag = 1/2 * fluid density * coefficient drag * cross-sectional area * velocity^2 * inverse of the velocity direction
 
 ```
+
+### Friction Force
+- contact force that resists sliding between surfaces
+- **Kinetic friction", object is sliding along a surface, direction is opposite of movement.
+- **Static friction", prevents an object from sliding, parallel to the contact surface.
+```
+F_friction = coefficient * F_Normal * - v_norm
+```
+
