@@ -283,3 +283,8 @@ Fdrag = 1/2 * fluid density * coefficient drag * cross-sectional area * velocity
 F_friction = coefficient * F_Normal * - v_norm
 ```
 
+### Gravitational Attraction Force
+```
+F_g = G * mass_a * mass_b / distance^2  * direction of attaction force
+```
+G: universal gravitational constant

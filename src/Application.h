@@ -15,7 +15,7 @@ class Application {
         Vec2 mouseCursor;
 
         // TODO: create a fluid
-        SDL_Rect liquid;
+        // SDL_Rect liquid;
 
     public:
         Application() = default;
