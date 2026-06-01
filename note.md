@@ -288,3 +288,13 @@ F_friction = coefficient * F_Normal * - v_norm
 F_g = G * mass_a * mass_b / distance^2  * direction of attaction force
 ```
 G: universal gravitational constant
+
+### Spring Force
+- Hooke's Law
+  - the force of the spring is proportional to the displacement of the spring, extended or compressed. 
+```
+F_s = -k * delta_l
+```
+k: spring constant
+delta_l: spring displacement
+

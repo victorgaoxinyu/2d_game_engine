@@ -14,7 +14,10 @@ class Application {
         Vec2 pushForce = Vec2(0, 0);
         Vec2 mouseCursor;
 
-        // TODO: create a fluid
+        Vec2 anchor;
+        float k = 100;
+        float restLength = 400;
+
         // SDL_Rect liquid;
 
     public:
