@@ -1,15 +1,15 @@
 #include "./Force.h"
 #include <algorithm>
 
-Vec2 Force::GenerateDragForce(const Particle& particle, float k) {
+Vec2 Force::GenerateDragForce(const Body& body, float k) {
     Vec2 dragForce = Vec2(0, 0);
 
-    if (particle.velocity.MagnitudeSquared() > 0) {
+    if (body.velocity.MagnitudeSquared() > 0) {
         // Calc drag direction
-        Vec2 dragDirection = particle.velocity.UnitVector() * -1.0;
+        Vec2 dragDirection = body.velocity.UnitVector() * -1.0;
         
         // Calc drag magnitude, k * |v|^2
-        float dragMagnitude = k * particle.velocity.MagnitudeSquared();
+        float dragMagnitude = k * body.velocity.MagnitudeSquared();
 
         // generate final drag force
         dragForce = dragDirection * dragMagnitude;
@@ -17,11 +17,11 @@ Vec2 Force::GenerateDragForce(const Particle& particle, float k) {
     return dragForce;
 }
 
-Vec2 Force::GenerateFrictionForce(const Particle& particle, float k) {
+Vec2 Force::GenerateFrictionForce(const Body& body, float k) {
     Vec2 frictionForce = Vec2(0, 0);
 
     // Calc friction direction
-    Vec2 frictionDirection = particle.velocity.UnitVector() * -1.0;
+    Vec2 frictionDirection = body.velocity.UnitVector() * -1.0;
 
     // Calc friction magnitude, for now..
     float frictionMagnitude = k;
@@ -32,7 +32,7 @@ Vec2 Force::GenerateFrictionForce(const Particle& particle, float k) {
     return frictionForce;
 }
 
-Vec2 Force::GenerateGravitationalForce(const Particle& a, const Particle&b, float G, float minDistance, float maxDistance) {
+Vec2 Force::GenerateGravitationalForce(const Body& a, const Body&b, float G, float minDistance, float maxDistance) {
     /*
     Fg = G * m_a * m_b * d_hat / ||d||^2
     */
@@ -50,9 +50,9 @@ Vec2 Force::GenerateGravitationalForce(const Particle& a, const Particle&b, floa
     return attactionForce;
 }
 
-Vec2 Force::GenerateSpringForce(const Particle &particle, const Vec2 anchor, float restLength, float k) {
+Vec2 Force::GenerateSpringForce(const Body &body, const Vec2 anchor, float restLength, float k) {
     // Calculate distance between anchor and object
-    Vec2 d = particle.position - anchor;
+    Vec2 d = body.position - anchor;
 
     // Find spring displacement
     float displacement = d.Magnitude() - restLength;

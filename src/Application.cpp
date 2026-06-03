@@ -14,9 +14,9 @@ void Application::Setup() {
     anchor = Vec2(Graphics::Width() / 2.0, 50);
 
     for (int i = 1; i <= bobNumber; i++) {
-        Particle* bob = new Particle(Graphics::Width() / 2.0, 50 + restLength * i, 2.0);
+        Body* bob = new Body(Graphics::Width() / 2.0, 50 + restLength * i, 2.0);
         bob->radius = 5;
-        particles.push_back(bob);
+        bodies.push_back(bob);
     }
 }
 
@@ -53,9 +53,9 @@ void Application::Input() {
             // Click to create more balls
             // case SDL_MOUSEBUTTONDOWN:
             //     if (event.button.button == SDL_BUTTON_LEFT) {
-            //         Particle* ball = new Particle(event.button.x, event.button.y, 1);
+            //         Body* ball = new Body(event.button.x, event.button.y, 1);
             //         ball->radius = 5;
-            //         particles.push_back(ball);
+            //         bodies.push_back(ball);
             //     };
             //     break;
             // case SDL_MOUSEMOTION:
@@ -74,9 +74,9 @@ void Application::Input() {
             // case SDL_MOUSEBUTTONUP:
             //     if (leftMouseButtonDown && event.button.button == SDL_BUTTON_LEFT) {
             //         leftMouseButtonDown = false;
-            //         Vec2 impulseDirection = (particles[bobNumber-1]->position - mouseCursor).UnitVector();
-            //         float impulseMagnitude = (particles[bobNumber-1]->position - mouseCursor).Magnitude() * 5.0;
-            //         particles[bobNumber-1]->velocity = impulseDirection * impulseMagnitude;
+            //         Vec2 impulseDirection = (bodies[bobNumber-1]->position - mouseCursor).UnitVector();
+            //         float impulseMagnitude = (bodies[bobNumber-1]->position - mouseCursor).Magnitude() * 5.0;
+            //         bodies[bobNumber-1]->velocity = impulseDirection * impulseMagnitude;
             //     }
             //     break;
         }
@@ -100,50 +100,50 @@ void Application::Update() {
     // Set time of current frame to be used in next iter
     timePreviousFrame = SDL_GetTicks();
 
-    // Apply forces to the particles
+    // Apply forces to the bodies
 
-    for (auto particle: particles) {
+    for (auto body: bodies) {
         // Add weight
-        Vec2 weight = Vec2(0.0, 9.8 * particle->mass * PIXELS_PER_METER);
-        particle->AddForce(weight);
+        Vec2 weight = Vec2(0.0, 9.8 * body->mass * PIXELS_PER_METER);
+        body->AddForce(weight);
     
         // Add pushForce
-        particle->AddForce(pushForce);
+        body->AddForce(pushForce);
 
         // Add dragForce
-        Vec2 drag = Force::GenerateDragForce(*particle, 0.01);
-        particle->AddForce(drag);
+        Vec2 drag = Force::GenerateDragForce(*body, 0.01);
+        body->AddForce(drag);
     }
 
     // apply sprintForce to bobOne
-    Vec2 springForceOne = Force::GenerateSpringForce(*particles[0], anchor, restLength, k);
-    particles[0]->AddForce(springForceOne);
+    Vec2 springForceOne = Force::GenerateSpringForce(*bodies[0], anchor, restLength, k);
+    bodies[0]->AddForce(springForceOne);
 
     for (int i = 1; i < bobNumber; i++) {
-        Vec2 springForce = Force::GenerateSpringForce(*particles[i], particles[i-1]->position, restLength, k);
-        particles[i]->AddForce(springForce);
-        particles[i-1]->AddForce(-springForce);
+        Vec2 springForce = Force::GenerateSpringForce(*bodies[i], bodies[i-1]->position, restLength, k);
+        bodies[i]->AddForce(springForce);
+        bodies[i-1]->AddForce(-springForce);
     }
 
 
-    for (auto particle: particles) {
-        particle->Integrate(deltaTime);
+    for (auto body: bodies) {
+        body->Integrate(deltaTime);
     }
     
-    for (auto particle: particles) {
-    // check particle position, limit and keep the particle inside of window...
-        if (particle->position.x - particle->radius <= 0) {
-            particle->position.x = particle->radius;
-            particle->velocity.x *= -0.9;  // 0.9 for energy loss
-        } else if (particle->position.x + particle->radius >= Graphics::Width()) {
-            particle->position.x = Graphics::Width() - particle->radius;
-            particle->velocity.x *= -0.9;
-        } else if (particle->position.y - particle->radius <= 0) {
-            particle->position.y = particle->radius;
-            particle->velocity.y *= -0.9;
-        } else if (particle->position.y + particle->radius >= Graphics::Height()) {
-            particle->position.y = Graphics::Height() - particle->radius;
-            particle->velocity.y *= -0.9;
+    for (auto body: bodies) {
+    // check body position, limit and keep the body inside of window...
+        if (body->position.x - body->radius <= 0) {
+            body->position.x = body->radius;
+            body->velocity.x *= -0.9;  // 0.9 for energy loss
+        } else if (body->position.x + body->radius >= Graphics::Width()) {
+            body->position.x = Graphics::Width() - body->radius;
+            body->velocity.x *= -0.9;
+        } else if (body->position.y - body->radius <= 0) {
+            body->position.y = body->radius;
+            body->velocity.y *= -0.9;
+        } else if (body->position.y + body->radius >= Graphics::Height()) {
+            body->position.y = Graphics::Height() - body->radius;
+            body->velocity.y *= -0.9;
         }
     }
 }
@@ -153,32 +153,32 @@ void Application::Render() {
 
     // Draw the anchor, bob, and spring
     Graphics::DrawFillCircle(anchor.x, anchor.y, 5, 0xFF001155);
-    Graphics::DrawLine(anchor.x, anchor.y, particles[0]->position.x, particles[0]->position.y, 0xFF313131);
+    Graphics::DrawLine(anchor.x, anchor.y, bodies[0]->position.x, bodies[0]->position.y, 0xFF313131);
     for (int i = 1; i < bobNumber; i ++) {
-        Graphics::DrawLine(particles[i-1]->position.x, particles[i-1]->position.y, particles[i]->position.x, particles[i]->position.y, 0xFF313131);
+        Graphics::DrawLine(bodies[i-1]->position.x, bodies[i-1]->position.y, bodies[i]->position.x, bodies[i]->position.y, 0xFF313131);
     }
 
     for (int i = 0; i < bobNumber; i ++) {
-        Graphics::DrawFillCircle(particles[i]->position.x, particles[i]->position.y, particles[i]->radius, 0xFFFFFFFF);
+        Graphics::DrawFillCircle(bodies[i]->position.x, bodies[i]->position.y, bodies[i]->radius, 0xFFFFFFFF);
     }
 
     // if (leftMouseButtonDown) {
-    //     Graphics::DrawLine(mouseCursor.x, mouseCursor.y, particles[bobNumber-1]->position.x, particles[bobNumber-1]->position.y, 0xFF123456);
+    //     Graphics::DrawLine(mouseCursor.x, mouseCursor.y, bodies[bobNumber-1]->position.x, bodies[bobNumber-1]->position.y, 0xFF123456);
     // }
 
     // Graphics::DrawFillCircle(anchor.x, anchor.y, 5, 0xFF001155);
-    // Graphics::DrawFillCircle(particles[0]->position.x, particles[0]->position.y, particles[0]->radius, 0xFFFFFFFF);
-    // Graphics::DrawFillCircle(particles[1]->position.x, particles[1]->position.y, partipcles[1]->radius, 0xFFFFFFFF);
-    // Graphics::DrawFillCircle(particles[2]->position.x, particles[2]->position.y, particles[2]->radius, 0xFFFFFFFF);
-    // Graphics::DrawFillCircle(particles[3]->position.x, particles[3]->position.y, particles[3]->radius, 0xFFFFFFFF);
+    // Graphics::DrawFillCircle(bodies[0]->position.x, bodies[0]->position.y, bodies[0]->radius, 0xFFFFFFFF);
+    // Graphics::DrawFillCircle(bodies[1]->position.x, bodies[1]->position.y, partipcles[1]->radius, 0xFFFFFFFF);
+    // Graphics::DrawFillCircle(bodies[2]->position.x, bodies[2]->position.y, bodies[2]->radius, 0xFFFFFFFF);
+    // Graphics::DrawFillCircle(bodies[3]->position.x, bodies[3]->position.y, bodies[3]->radius, 0xFFFFFFFF);
 
     Graphics::RenderFrame();
 }
 
 
 void Application::Destroy() {
-    for (auto particle: particles) {
-        delete particle;
+    for (auto body: bodies) {
+        delete body;
     }
     Graphics::CloseWindow();
 }

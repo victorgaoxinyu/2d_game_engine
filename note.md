@@ -298,3 +298,16 @@ F_s = -k * delta_l
 k: spring constant
 delta_l: spring displacement
 
+**TODO: softbody/verlet**
+
+## Rigid body
+- different than particles
+- shape, rotation, and center of mass
+- rigid body does not deform
+- three examples
+  - circles
+  - polygons
+  - boxes (inherit from polygon)
+```cpp
+enum ShapeType { BOX, POLYGON, CIRCLE };
+```
