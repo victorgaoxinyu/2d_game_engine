@@ -15,8 +15,9 @@ class Application {
         Vec2 mouseCursor;
 
         Vec2 anchor;
-        float k = 100;
-        float restLength = 400;
+        float k = 400;
+        float restLength = 30;
+        int bobNumber = 15;
 
         // SDL_Rect liquid;
 
