@@ -5,8 +5,14 @@
 
 bool Application::IsRunning() { return running; }
 
-void Application::Setup() { running = Graphics::OpenWindow(); }
+void Application::Setup() { 
+  running = Graphics::OpenWindow();
 
+  Body* body = new Body(CircleShape(50), Graphics::Width() / 2.0, Graphics::Height() / 2.0, 1.0);
+  body->radius = 4;
+  bodies.push_back(body);
+  
+}
 void Application::Input() {
   SDL_Event event;
   while (SDL_PollEvent(&event)) {
