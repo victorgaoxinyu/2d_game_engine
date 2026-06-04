@@ -311,3 +311,40 @@ delta_l: spring displacement
 ```cpp
 enum ShapeType { BOX, POLYGON, CIRCLE };
 ```
+
+### Shapes
+```cpp
+struct Shape {
+  virtual ~Shape() = default;
+  virtual ShapeType GetType() const = 0;
+  virtual float GetMomentOfInertia() const = 0;
+}
+
+struct CircleShape: public Shape {
+  float radius;
+
+  CircleShape(const float radius);
+  virtual ~CircleShape();
+  ShapeType GetType() const override;
+  float GetMomentOfInertia() const override;
+}
+
+// convec polygons for now!
+struct PolygonShape: public Shape {
+  vector<Vec2> vertices;
+
+  PolygonShape() = default;
+  PolygonShape(const vector<Vec2> vertices);
+  virtual ~PolygonShape();
+  float GetMomentofInertia() const override;
+}
+
+struct BoxShape: public PolygonShape {
+  float width, height;
+
+  BoxShape(float width, float height);
+  virtual ~BoxShape();
+  float GetMomentofInertia() const override;
+}
+
+```

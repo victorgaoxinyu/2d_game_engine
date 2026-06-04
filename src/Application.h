@@ -6,30 +6,30 @@
 #include <vector>
 
 class Application {
-    private: 
-        bool running = false;
-        bool leftMouseButtonDown = false;
-        
-        std::vector<Body*> bodies;
-        Vec2 pushForce = Vec2(0, 0);
-        Vec2 mouseCursor;
+private:
+  bool running = false;
+  bool leftMouseButtonDown = false;
 
-        Vec2 anchor;
-        float k = 400;
-        float restLength = 30;
-        int bobNumber = 15;
+  std::vector<Body *> bodies;
+  Vec2 pushForce = Vec2(0, 0);
+  Vec2 mouseCursor;
 
-        // SDL_Rect liquid;
+  Vec2 anchor;
+  float k = 400;
+  float restLength = 30;
+  int bobNumber = 15;
 
-    public:
-        Application() = default;
-        ~Application() = default;
-        bool IsRunning();
-        void Setup();
-        void Input();
-        void Update();
-        void Render();
-        void Destroy();
+  // SDL_Rect liquid;
+
+public:
+  Application() = default;
+  ~Application() = default;
+  bool IsRunning();
+  void Setup();
+  void Input();
+  void Update();
+  void Render();
+  void Destroy();
 };
 
 #endif

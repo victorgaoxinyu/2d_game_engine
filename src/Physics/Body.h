@@ -1,27 +1,34 @@
 #ifndef BODY_H
 #define BODY_H
 
+#include "Shape.h"
 #include "Vec2.h"
 
 struct Body {
-    int radius;
+  int radius;
 
-    Vec2 position;
-    Vec2 velocity;
-    Vec2 acceleration;
+  // Linear motion
+  Vec2 position;
+  Vec2 velocity;
+  Vec2 acceleration;
 
-    Vec2 sumForces;
+  // TODO: Angular motion
 
-    float mass;       // unit?
-    float invMass;    // most physic engine store this for performance
+  Vec2 sumForces;
 
-    Body(float x, float y, float mass);
-    ~Body();
+  float mass;    // unit?
+  float invMass; // most physic engine store this for performance
 
-    void AddForce(const Vec2& force);
-    void ClearForces();
-    
-    void Integrate(float dt);
+  // a pointer to the geometry shape of the rigid body
+  Shape *shape = NULL;
+
+  Body(const Shape &shape, float x, float y, float mass);
+  ~Body();
+
+  void AddForce(const Vec2 &force);
+  void ClearForces();
+
+  void Integrate(float dt);
 };
 
 #endif
