@@ -5,8 +5,6 @@
 #include "Vec2.h"
 
 struct Body {
-  int radius;
-
   // Linear motion
   Vec2 position;
   Vec2 velocity;
