@@ -12,7 +12,7 @@ void Application::Setup()
   Body *circleBody = new Body(CircleShape(50), Graphics::Width() / 2.0, Graphics::Height() / 2.0, 1.0);
   bodies.push_back(circleBody);
 
-  Body *boxBody = new Body(BoxShape(20, 40), Graphics::Width() / 2.0, Graphics::Height() / 2.0, 2.0);
+  Body *boxBody = new Body(BoxShape(40, 100), Graphics::Width() / 2.0 + 100, Graphics::Height() / 2.0, 2.0);
   bodies.push_back(boxBody);
 }
 void Application::Input()
@@ -168,7 +168,7 @@ void Application::Render()
     } else if (body->shape->GetType() == BOX)
     {
       BoxShape *boxShape = (BoxShape *)body->shape;
-      Graphics::DrawFillRect(body->position.x, body->position.y, boxShape->width, boxShape->height, 0xFFFFFF10);
+      Graphics::DrawRect(body->position.x, body->position.y, boxShape->width, boxShape->height, 0xFF00FFFF);
     }
   }
 

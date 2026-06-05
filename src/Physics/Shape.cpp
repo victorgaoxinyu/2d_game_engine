@@ -53,6 +53,9 @@ float PolygonShape::GetMomentOfInertia() const
 
 BoxShape::BoxShape(float width, float height)
 {
+  this->width = width;
+  this->height = height;
+
   std::cout << "PolygonShape constructor called!" << std::endl;
 };
 
