@@ -19,6 +19,13 @@ Shape *CircleShape::Clone() const
   return new CircleShape(radius);
 };
 
+float CircleShape::GetMomentOfInertia() const
+{
+  // For solid circle, 1/2 * r^2 * mass
+  // this needs to be multiplied by mass when using
+  return 0.5 * (radius * radius);
+};
+
 ShapeType CircleShape::GetType() const { return CIRCLE; }
 
 PolygonShape::PolygonShape(const std::vector<Vec2> vertices)
@@ -38,6 +45,12 @@ Shape *PolygonShape::Clone() const
 
 ShapeType PolygonShape::GetType() const { return POLYGON; }
 
+float PolygonShape::GetMomentOfInertia() const
+{
+  // TODO:
+  return 0.0;
+}
+
 BoxShape::BoxShape(float width, float height)
 {
   std::cout << "PolygonShape constructor called!" << std::endl;
@@ -54,3 +67,10 @@ Shape *BoxShape::Clone() const
 };
 
 ShapeType BoxShape::GetType() const { return BOX; };
+
+float BoxShape::GetMomentOfInertia() const
+{
+  // For rectangle, 1/12 * (w^2 + h^2) * mass
+  // this needs to be multiplied by mass when using
+  return (0.0833333) * (width * width + height * height);
+}

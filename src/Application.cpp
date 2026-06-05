@@ -113,7 +113,7 @@ void Application::Update()
 
   for (auto body : bodies)
   {
-    body->Integrate(deltaTime);
+    body->IntegrateLinear(deltaTime);
   }
 
   for (auto body : bodies)
