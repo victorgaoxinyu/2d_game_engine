@@ -9,8 +9,11 @@ void Application::Setup()
 {
   running = Graphics::OpenWindow();
 
-  Body *body = new Body(CircleShape(50), Graphics::Width() / 2.0, Graphics::Height() / 2.0, 1.0);
-  bodies.push_back(body);
+  Body *circleBody = new Body(CircleShape(50), Graphics::Width() / 2.0, Graphics::Height() / 2.0, 1.0);
+  bodies.push_back(circleBody);
+
+  Body *boxBody = new Body(BoxShape(20, 40), Graphics::Width() / 2.0, Graphics::Height() / 2.0, 2.0);
+  bodies.push_back(boxBody);
 }
 void Application::Input()
 {
@@ -109,11 +112,17 @@ void Application::Update()
 
     // Add pushForce
     body->AddForce(pushForce);
+
+    // Add torque
+    float torque = 100.0;
+    body->AddTorque(torque);
+
   }
 
   for (auto body : bodies)
   {
     body->IntegrateLinear(deltaTime);
+    body->IntegrateAngular(deltaTime);
   }
 
   for (auto body : bodies)
@@ -150,18 +159,19 @@ void Application::Render()
 {
   Graphics::ClearScreen(0xFF056263); // transparency R G B
 
-  static float angle = 0.0;
-
   for (auto body : bodies)
   {
     if (body->shape->GetType() == CIRCLE)
     {
       CircleShape *circleShape = (CircleShape *)body->shape;
-      Graphics::DrawCircle(body->position.x, body->position.y, circleShape->radius, angle, 0xFFFFFFFF);
+      Graphics::DrawCircle(body->position.x, body->position.y, circleShape->radius, body->rotation, 0xFFFFFFFF);
+    } else if (body->shape->GetType() == BOX)
+    {
+      BoxShape *boxShape = (BoxShape *)body->shape;
+      Graphics::DrawFillRect(body->position.x, body->position.y, boxShape->width, boxShape->height, 0xFFFFFF10);
     }
   }
 
-  angle += 0.01;
 
   Graphics::RenderFrame();
 }
