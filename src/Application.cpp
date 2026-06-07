@@ -121,14 +121,7 @@ void Application::Update()
 
   for (auto body : bodies)
   {
-    body->IntegrateLinear(deltaTime);
-    body->IntegrateAngular(deltaTime);
-    bool isPolygon = body->shape->GetType() == POLYGON || body->shape->GetType() == BOX;
-    if (isPolygon)
-    {
-      PolygonShape* polygonShape = (PolygonShape *)body->shape;
-      polygonShape->UpdateVertices(body->rotation, body->position);
-    }
+    body->Update(deltaTime);
   }
 
   for (auto body : bodies)

@@ -38,6 +38,7 @@ struct Body
   void ClearTorque();
 
   // Integration
+  void Update(float dt);
   void IntegrateLinear(float dt);
   void IntegrateAngular(float dt);
 };
