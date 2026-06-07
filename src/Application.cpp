@@ -106,9 +106,9 @@ void Application::Update()
 
   for (auto body : bodies)
   {
-    // Add weight
-    Vec2 weight = Vec2(0.0, 9.8 * body->mass * PIXELS_PER_METER);
-    body->AddForce(weight);
+    // // Add weight
+    // Vec2 weight = Vec2(0.0, 9.8 * body->mass * PIXELS_PER_METER);
+    // body->AddForce(weight);
 
     // Add pushForce
     body->AddForce(pushForce);
@@ -123,6 +123,12 @@ void Application::Update()
   {
     body->IntegrateLinear(deltaTime);
     body->IntegrateAngular(deltaTime);
+    bool isPolygon = body->shape->GetType() == POLYGON || body->shape->GetType() == BOX;
+    if (isPolygon)
+    {
+      PolygonShape* polygonShape = (PolygonShape *)body->shape;
+      polygonShape->UpdateVertices(body->rotation, body->position);
+    }
   }
 
   for (auto body : bodies)
@@ -151,6 +157,29 @@ void Application::Update()
         body->position.y = Graphics::Height() - circleShape->radius;
         body->velocity.y *= -0.9;
       }
+    } else if (body->shape->GetType() == BOX)
+    {
+      BoxShape *boxShape = (BoxShape *)body->shape;
+      if (body->position.x - boxShape->width / 2 <= 0)
+      {
+        body->position.x = boxShape->width / 2;
+        body->velocity.x *= -0.9;
+      }
+      else if (body->position.x + boxShape->width / 2 >= Graphics::Width())
+      {
+        body->position.x = Graphics::Width() - boxShape->width / 2;
+        body->velocity.x *= -0.9;
+      }
+      else if (body->position.y - boxShape->height / 2 <= 0)
+      {
+        body->position.y = boxShape->height / 2;
+        body->velocity.y *= -0.9;
+      }
+      else if (body->position.y + boxShape->height / 2 >= Graphics::Height())
+      {
+        body->position.y = Graphics::Height() - boxShape->height / 2;
+        body->velocity.y *= -0.9;
+      }
     }
   }
 }
@@ -168,7 +197,7 @@ void Application::Render()
     } else if (body->shape->GetType() == BOX)
     {
       BoxShape *boxShape = (BoxShape *)body->shape;
-      Graphics::DrawRect(body->position.x, body->position.y, boxShape->width, boxShape->height, 0xFF00FFFF);
+      Graphics::DrawPolygon(body->position.x, body->position.y, boxShape->worldVertices, 0xFF00FFFF);
     }
   }
 

@@ -21,10 +21,10 @@ bool Graphics::OpenWindow() {
     }
     SDL_DisplayMode display_mode;
     SDL_GetCurrentDisplayMode(0, &display_mode);
-    windowWidth = display_mode.w;
-    windowHeight = display_mode.h;
+    windowWidth = display_mode.w - 100;
+    windowHeight = display_mode.h - 100;
     window = SDL_CreateWindow("Game Engine", 0, 0,
-                             windowWidth, windowHeight, SDL_WINDOW_FULLSCREEN_DESKTOP);
+                             windowWidth, windowHeight, SDL_WINDOW_RESIZABLE);
     if (!window) {
         std::cerr << "Error creating SDL window" << std::endl;
         return false;
