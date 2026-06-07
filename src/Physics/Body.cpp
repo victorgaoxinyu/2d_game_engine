@@ -24,11 +24,12 @@ Body::Body(const Shape &shape, float x, float y, float mass)
   }
 
   this->I = shape.GetMomentOfInertia() * mass;
-   
+
   if (this->I != 0.0)
   {
     this->invI = 1.0 / this->I;
-  } else
+  }
+  else
   {
     this->invI = 0.0;
   }

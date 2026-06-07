@@ -4,16 +4,17 @@
 #include "Shape.h"
 #include "Vec2.h"
 
-struct Body {
+struct Body
+{
   // Linear motion
   Vec2 position;
   Vec2 velocity;
   Vec2 acceleration;
 
-  // Angular motion
-  float rotation;
-  float angularVelocity;
-  float angularAcceleration;
+  // Angular motion, scalar!
+  float rotation;            /* theta */
+  float angularVelocity;     /* omega */
+  float angularAcceleration; /* alpha */
 
   // Forces and torque
   Vec2 sumForces;
@@ -37,7 +38,7 @@ struct Body {
   void ClearTorque();
 
   // Integration
-  void IntegrateLinear (float dt);
+  void IntegrateLinear(float dt);
   void IntegrateAngular(float dt);
 };
 

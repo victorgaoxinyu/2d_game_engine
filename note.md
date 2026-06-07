@@ -348,3 +348,35 @@ struct BoxShape: public PolygonShape {
 }
 
 ```
+
+### Angular velocity and Angular Acceleration
+- angle: *theta*, radian
+- angular velocity: *omega*
+- angular acceleration: *alpha*
+
+
+How to initiate rotational motion? -> Torque
+
+### Torque
+- torque: *tau*
+```
+F_tau = F * d * sin(beta)
+```
+F_tau: Torque force
+F: 
+d: distance from the center to the point where the force is being applied
+beta: 
+```
+Tau = I * alpha
+```
+I: Moment of inertia, is analogous to mass, measures how much object resists to change its angular acceleration.
+- moment of inertia is **inversely proportional** to angular acceleration
+
+different moment of inertia for different shapes
+```
+# solid circle
+I = r^2 / 2 * m
+
+# solid rectangle
+I = (w^2 + h^2) / 12 * m 
+```
