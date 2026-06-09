@@ -11,11 +11,11 @@ void Application::Setup()
 {
   running = Graphics::OpenWindow();
 
-  Body *bigBall = new Body(CircleShape(100), Graphics::Width() / 2.0, Graphics::Height() / 2.0, 2.0);
+  Body *bigBall = new Body(CircleShape(100), Graphics::Width() / 2.0, Graphics::Height() / 2.0, 10.0);
   bodies.push_back(bigBall);
 
-  Body *smallBall = new Body(CircleShape(50), Graphics::Width() / 2.0, Graphics::Height() / 2.0 + 100, 1.0);
-  bodies.push_back(smallBall);
+  // Body *smallBall = new Body(CircleShape(50), Graphics::Width() / 2.0, Graphics::Height() / 2.0 + 100, 1.0);
+  // bodies.push_back(smallBall);
 
 }
 void Application::Input()
@@ -50,11 +50,11 @@ void Application::Input()
       if (event.key.keysym.sym == SDLK_RIGHT)
         pushForce.x = 0;
       break;
-    case SDL_MOUSEMOTION:
+    case SDL_MOUSEBUTTONDOWN:
       int x, y;
       SDL_GetMouseState(&x, &y);
-      bodies[0]->position.x = x;
-      bodies[0]->position.y = y;
+      Body* smallBall = new Body(CircleShape(20), x, y, 1.0);
+      bodies.push_back(smallBall);
       break;
     }
   }
@@ -78,6 +78,8 @@ void Application::Update()
 
   // Set time of current frame to be used in next iter
   timePreviousFrame = SDL_GetTicks();
+
+  bodies[0]->AddForce(pushForce);
 
   // // Apply forces to the bodies
   // for (auto body : bodies)
@@ -113,10 +115,11 @@ void Application::Update()
       Contact contact;
       if (CollisionDetection::IsColliding(a, b, contact))
       {
-        // std::cout << contact.start.x << contact.start.y << std::endl;
+
+        contact.ResolvePenetration();
+
         Graphics::DrawFillCircle(contact.start.x, contact.start.y, 5, 0xFFFF0000);
         Graphics::DrawFillCircle(contact.end.x, contact.end.y, 5, 0xFF00FF00);
-        
         Graphics::DrawLine(contact.start.x, contact.start.y, contact.end.x, contact.end.y, 0xFFFFFFFF);
 
         a->isColliding = true;
