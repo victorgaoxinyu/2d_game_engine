@@ -380,3 +380,75 @@ I = r^2 / 2 * m
 # solid rectangle
 I = (w^2 + h^2) / 12 * m 
 ```
+
+### Box Vertices
+Local space -> World space
+
+### OOP
+why not implement the draw method in Shape classes?
+- because we dont want to have render-related code in **Physics** engine.
+
+## Circle-circle collision detection
+- Collision Detection
+- Collision Resolution
+
+## Collision Contact Information
+- Start and end contact points (from "a" to "b")
+- Normal direction is always from "a" to "b"
+- Depth is the penetration length of the collision
+
+```cpp
+struct Contact {
+  Body* a;
+  Body* b;
+
+  Vec2 start;
+  Vec2 end;
+
+  Vec2 normal;
+  float depth;
+}
+``` 
+
+### Collision system
+Collision detection -> Compute collision information -> Collision Resolution
+- detection is shape-specific
+- resolution is shape agnostic
+
+
+### Broad Phase and Narrow Phase
+- Broad Phase
+  - check bodies that *probably* gonna collide.
+  - use a faster algo, like bounding circles or bounding boxes
+- Narrow Phase
+  - check if objects are *indeed* colliding.
+
+### Collision resolution
+- assume collision detection provides
+  - Collision normal
+  - contact points for both bodies
+  - Penetration depth
+
+- **Collision normal** is the direction in which the potential impulse should be applied
+- **Penetration depth** (along with some other things) will determine how big of the impulse
+
+
+Methods
+- Projection method
+```
+# using mass
+d_a = depth * m_b / (m_a + m_b)
+d_b = depth * m_a / (m_a + m_b)
+
+# using invMass
+
+d_a = depth / (1/m_a + 1/m_b) * 1/m_a
+d_b = depth / (1/m_a + 1/m_b) * 1/m_b
+```
+```cpp
+void Contract::ResolvePenetration() {
+  float da = depth / (a->invMass + b->invMass) * a->invMass;
+  float db = depth / (a->invMass + b->invMass) * b->invMass;
+}
+
+```
