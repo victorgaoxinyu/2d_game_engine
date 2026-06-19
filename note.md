@@ -452,3 +452,6 @@ void Contract::ResolvePenetration() {
 }
 
 ```
+
+Reason we try to use invMass here is most physics engine, we try to simular object with infinite Mass
+- to simulate things that dont move, like floor

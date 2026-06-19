@@ -11,7 +11,7 @@ void Application::Setup()
 {
   running = Graphics::OpenWindow();
 
-  Body *bigBall = new Body(CircleShape(100), Graphics::Width() / 2.0, Graphics::Height() / 2.0, 10.0);
+  Body *bigBall = new Body(CircleShape(100), Graphics::Width() / 2.0, Graphics::Height() / 2.0, 0);
   bodies.push_back(bigBall);
 
   // Body *smallBall = new Body(CircleShape(50), Graphics::Width() / 2.0, Graphics::Height() / 2.0 + 100, 1.0);
