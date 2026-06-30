@@ -11,7 +11,7 @@ void Application::Setup()
 {
   running = Graphics::OpenWindow();
 
-  Body *bigBall = new Body(CircleShape(100), Graphics::Width() / 2.0, Graphics::Height() / 2.0, 5.0);
+  Body *bigBall = new Body(CircleShape(100), Graphics::Width() / 2.0, Graphics::Height() / 2.0, 0.0);
   bodies.push_back(bigBall);
 
   // Body *smallBall = new Body(CircleShape(50), Graphics::Width() / 2.0, Graphics::Height() / 2.0 + 100, 1.0);
@@ -82,18 +82,18 @@ void Application::Update()
 
   bodies[0]->AddForce(pushForce);
 
-  // // Apply forces to the bodies
-  // for (auto body : bodies)
-  // {
-  //   // // Add weight
-  //   Vec2 weight = Vec2(0.0, 9.8 * body->mass * PIXELS_PER_METER);
-  //   body->AddForce(weight);
+  // Apply forces to the bodies
+  for (auto body : bodies)
+  {
+    // // Add weight
+    Vec2 weight = Vec2(0.0, 9.8 * body->mass * PIXELS_PER_METER);
+    body->AddForce(weight);
 
-  //   // Add windForce
-  //   Vec2 wind = Vec2(20.0 * PIXELS_PER_METER, 0.0);
-  //   body->AddForce(wind);
+    // Add windForce
+    Vec2 wind = Vec2(2.0 * PIXELS_PER_METER, 0.0);
+    body->AddForce(wind);
 
-  // }
+  }
 
   for (auto body : bodies)
   {
@@ -194,7 +194,7 @@ void Application::Render()
     if (body->shape->GetType() == CIRCLE)
     {
       CircleShape *circleShape = (CircleShape *)body->shape;
-      Graphics::DrawCircle(body->position.x, body->position.y, circleShape->radius, body->rotation, color);
+      Graphics::DrawFillCircle(body->position.x, body->position.y, circleShape->radius, color);
     } else if (body->shape->GetType() == BOX)
     {
       BoxShape *boxShape = (BoxShape *)body->shape;
