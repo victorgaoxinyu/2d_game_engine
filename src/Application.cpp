@@ -11,7 +11,7 @@ void Application::Setup()
 {
   running = Graphics::OpenWindow();
 
-  Body *bigBall = new Body(CircleShape(100), Graphics::Width() / 2.0, Graphics::Height() / 2.0, 0);
+  Body *bigBall = new Body(CircleShape(100), Graphics::Width() / 2.0, Graphics::Height() / 2.0, 5.0);
   bodies.push_back(bigBall);
 
   // Body *smallBall = new Body(CircleShape(50), Graphics::Width() / 2.0, Graphics::Height() / 2.0 + 100, 1.0);
@@ -34,7 +34,7 @@ void Application::Input()
       if (event.key.keysym.sym == SDLK_UP)
         pushForce.y = -50 * PIXELS_PER_METER;
       if (event.key.keysym.sym == SDLK_DOWN)
-        pushForce.y = 50 * PIXELS_PER_METER;
+        pushForce.y = 50 * PIXELS_PER_METER; 
       if (event.key.keysym.sym == SDLK_LEFT)
         pushForce.x = -50 * PIXELS_PER_METER;
       if (event.key.keysym.sym == SDLK_RIGHT)
@@ -53,7 +53,8 @@ void Application::Input()
     case SDL_MOUSEBUTTONDOWN:
       int x, y;
       SDL_GetMouseState(&x, &y);
-      Body* smallBall = new Body(CircleShape(20), x, y, 1.0);
+      Body* smallBall = new Body(CircleShape(40), x, y, 1.0);
+      smallBall->restitution = 0.9;
       bodies.push_back(smallBall);
       break;
     }
@@ -116,7 +117,7 @@ void Application::Update()
       if (CollisionDetection::IsColliding(a, b, contact))
       {
 
-        contact.ResolvePenetration();
+        contact.ResolveCollision();
 
         Graphics::DrawFillCircle(contact.start.x, contact.start.y, 5, 0xFFFF0000);
         Graphics::DrawFillCircle(contact.end.x, contact.end.y, 5, 0xFF00FF00);

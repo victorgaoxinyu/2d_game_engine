@@ -16,6 +16,7 @@ struct Contact
     float depth;
 
     void ResolvePenetration();
+    void ResolveCollision();
     
     Contact() = default;
     ~Contact() = default;
