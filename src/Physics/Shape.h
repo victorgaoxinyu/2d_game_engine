@@ -42,6 +42,7 @@ struct PolygonShape : public Shape
   Shape *Clone() const override;
   float GetMomentOfInertia() const override;
   // Function to rotate and translate polygon vertices from local space to world space
+  Vec2 EdgeAt(int index) const;
   void UpdateVertices(float angle, const Vec2& position);
 };
 

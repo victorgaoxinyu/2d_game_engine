@@ -528,3 +528,27 @@ void Collision::ResolveCollision(Contact& contact) {
   b->ApplyImpulse(-jn);
 }
 ```
+### Colliding Boxes
+SAT: Separating Axis Theorem
+
+#### Finding the minimum separation with SAT
+steps
+- loop all vertices from pologon a, find the normal of each edge
+- for each normal axis, loop all vertices of polygon b
+- get separation of each vertex of b by projecting them onto normal axis
+- keep track of the best projection of each normal axis
+- if separation value is positive, no overlap
+- if negative, overlap
+
+```cpp
+for (va: a->vertices) {
+  normal = perpendicular(va)
+  for (vb: b->vertices) {
+    projection = dot(vb-va, normal)
+    minSep = "keep the min sep/projection out of all vertices of b"
+  }
+  separation = "save the greatest separation out of all normal axis"
+}
+
+return separation
+```
