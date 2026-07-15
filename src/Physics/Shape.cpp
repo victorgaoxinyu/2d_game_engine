@@ -58,6 +58,32 @@ Vec2 PolygonShape::EdgeAt(int index) const {
   return worldVertices[nextVertex] - worldVertices[currVertex];
 }
 
+float PolygonShape::FindMinSeparation(const PolygonShape* other) const {
+    // TODO:
+    // loop all vertices of "this" polygon
+    //   find normal axis
+    //   loop all vertices of "other" polygon
+    //     project vertex b onto normal axis
+    //     track of the min separation
+    // return best separation outof all axis
+
+    float separation = std::numeric_limits<float>::lowest();
+
+    for (int i = 0; i < this->worldVertices.size(); i++) {
+        Vec2 va = this->worldVertices[i];
+        Vec2 normal = this->EdgeAt(i).Normal();
+
+        float minSep = std::numeric_limits<float>::max();
+
+        for (int j = 0; j < other->worldVertices.size(); j++) {
+            Vec2 vb = other->worldVertices[j];
+            minSep = std::min(minSep, (vb - va).Dot(normal));
+        }
+        separation = std::max(separation, minSep);
+    }
+    return separation;
+}
+
 void PolygonShape::UpdateVertices(float angle, const Vec2& position)
 {
   // loop all vertices, transform from local to world
