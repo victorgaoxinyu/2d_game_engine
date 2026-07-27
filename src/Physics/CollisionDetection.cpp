@@ -53,14 +53,20 @@ bool CollisionDetection::IsCollidingCircleCircle(Body* a, Body* b, Contact& cont
 bool CollisionDetection::IsCollidingPolygonPolygon(Body* a, Body* b, Contact& contact) {
     const PolygonShape* aPolygonShape = (PolygonShape*) a->shape;
     const PolygonShape* bPolygonShape = (PolygonShape*) b->shape;
+    Vec2 aAxis, bAxis;
+    Vec2 aPoint, bPoint;
+    float abSeparation = aPolygonShape->FindMinSeparation(bPolygonShape, aAxis, aPoint);
 
-    if (aPolygonShape->FindMinSeparation(bPolygonShape) >= 0) {
+    if (abSeparation >= 0) {
         return false;
     }
 
-    if (bPolygonShape->FindMinSeparation(aPolygonShape) >= 0) {
+    float baSeparation = bPolygonShape->FindMinSeparation(aPolygonShape, bAxis, bPoint);
+
+    if (baSeparation >= 0) {
         return false;
     }
-
+    // TODO: populate the contact information
+    // contact.depth, contact.start, contact.end, contact.normal
     return true;
 }

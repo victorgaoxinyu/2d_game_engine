@@ -41,10 +41,9 @@ struct PolygonShape : public Shape
   ShapeType GetType() const override;
   Shape *Clone() const override;
   float GetMomentOfInertia() const override;
-  // Function to rotate and translate polygon vertices from local space to world space
   Vec2 EdgeAt(int index) const;
-  float FindMinSeparation(const PolygonShape* other) const;
-  
+  float FindMinSeparation(const PolygonShape* other, Vec2& axis, Vec2& point) const;
+
   void UpdateVertices(float angle, const Vec2& position);
 };
 
