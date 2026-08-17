@@ -74,6 +74,15 @@ void Body::ApplyImpulse(const Vec2& j) {
   velocity += j * invMass;
 }
 
+void Body::ApplyImpulse(const Vec2 &j, const Vec2 &r) {
+  if (IsStatic()) {
+    return;
+  }
+
+  velocity += j * invMass;
+  angularVelocity += r.Cross(j) * invI;
+}
+
 void Body::IntegrateAngular(float dt)
 {
   if (IsStatic()) {

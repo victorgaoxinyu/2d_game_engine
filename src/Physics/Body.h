@@ -49,7 +49,10 @@ struct Body
   void IntegrateLinear(float dt);
   void IntegrateAngular(float dt);
 
+  // Linear impulse on center of mass
   void ApplyImpulse(const Vec2 &j);
+  // Linear + Angular impulse on contact point
+  void ApplyImpulse(const Vec2 &j, const Vec2 &r);
 };
 
 #endif

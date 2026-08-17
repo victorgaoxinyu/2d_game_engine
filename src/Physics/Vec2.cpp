@@ -62,6 +62,7 @@ float Vec2::Dot(const Vec2& v) const {
     return (x * v.x) + (y * v.y);
 }
 
+/*See simplification of 2D cross product section*/
 float Vec2::Cross(const Vec2& v) const {
 	return (x * v.y) - (y * v.x);
 }
