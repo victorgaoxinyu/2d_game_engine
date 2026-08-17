@@ -30,6 +30,8 @@ struct Body
 
   // Coefficient of restitution (elasticity)
   float restitution;
+  // Coefficient of friction
+  float friction;
   
   // a pointer to the geometry shape of the rigid body
   Shape *shape = nullptr;

@@ -22,10 +22,10 @@ void Application::Setup()
   bodies.push_back(leftWall);
   bodies.push_back(rightWall);
 
-  Body* bigBall = new Body(CircleShape(200), Graphics::Width() / 2.0, Graphics::Height() / 2.0, 0.0);
-  bigBall->rotation = 1.4;
-  bigBall->restitution = 0.5;
-  bodies.push_back(bigBall);
+  Body* bigBox = new Body(BoxShape(200, 200), Graphics::Width() / 2.0, Graphics::Height() / 2.0, 0.0);
+  bigBox->rotation = 1.4;
+  bigBox->restitution = 0.1;
+  bodies.push_back(bigBox);
 
 }
 void Application::Input()
@@ -45,10 +45,11 @@ void Application::Input()
     case SDL_MOUSEBUTTONDOWN:
       int x, y;
       SDL_GetMouseState(&x, &y);
-      // Body* box = new Body(BoxShape(50, 50), x, y, 1.0);
-      // bodies.push_back(box);
-      Body* ball = new Body(CircleShape(50), x, y, 1.0);
-      bodies.push_back(ball);
+      Body* box = new Body(BoxShape(50, 50), x, y, 1.0);
+      box->restitution = 0.2;
+      bodies.push_back(box);
+      // Body* ball = new Body(CircleShape(50), x, y, 1.0);
+      // bodies.push_back(ball);
       break;
     }
   }
