@@ -37,8 +37,8 @@ void Contact::ResolveCollision() {
     float vrelDotNormal = vrel.Dot(normal);
 
     // collision impulse
-    const Vec2 impluseDirection = normal;
-    const float impluseMagnitude = - (1 + e) * vrelDotNormal / 
+    const Vec2 impulseDirection = normal;
+    const float impulseMagnitude = - (1 + e) * vrelDotNormal / 
                                 (
                                     a->invMass 
                                     + b->invMass
@@ -46,9 +46,27 @@ void Contact::ResolveCollision() {
                                     + (rb.Cross(normal) * rb.Cross(normal) * b->invI)
                                 );
 
-    Vec2 jn = impluseDirection * impluseMagnitude;
+    Vec2 jn = impulseDirection * impulseMagnitude;
+
+    // TODO: Calculate impulse along tangent
+    Vec2 tangent = normal.Normal();
+    const Vec2 tangentImpulseDirection = tangent;
+    float vrelDotTangent = vrel.Dot(tangent);
+    const float tangentImpulseMagnitude = - (1 + e) * vrelDotTangent / 
+                                        (
+                                            a->invMass
+                                            + b->invMass
+                                            + (ra.Cross(tangent) * ra.Cross(tangent) * a->invI)
+                                            + (rb.Cross(tangent) * rb.Cross(tangent) * b->invI)   
+                                        );
+
+    Vec2 jt = tangentImpulseDirection * tangentImpulseMagnitude;
 
     // appply impulse vector to both objects in opposite direction
     a->ApplyImpulse(jn, ra);
     b->ApplyImpulse(-jn, rb);
+
+    // apply tangent impulse vector
+    a->ApplyImpulse(jt, ra);
+    b->ApplyImpulse(-jt, rb);
 }

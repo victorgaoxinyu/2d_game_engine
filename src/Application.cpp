@@ -12,13 +12,20 @@ void Application::Setup()
   running = Graphics::OpenWindow();
 
   Body* floor = new Body(BoxShape(Graphics::Width() - 50, 50), Graphics::Width() / 2.0, Graphics::Height() - 50, 0.0);
+  Body* leftWall = new Body(BoxShape(50, Graphics::Height() - 100), 50, Graphics::Height() / 2.0 - 25, 0.0);
+  Body* rightWall = new Body(BoxShape(50, Graphics::Height() - 100), Graphics::Width() - 50, Graphics::Height() / 2.0 - 25, 0.0);
+  
   floor->restitution = 0.2;
+  leftWall->restitution = 0.2;
+  rightWall->restitution = 0.2;
   bodies.push_back(floor);
+  bodies.push_back(leftWall);
+  bodies.push_back(rightWall);
 
-  Body* bigBox = new Body(BoxShape(200, 200), Graphics::Width() / 2.0, Graphics::Height() / 2.0, 0.0);
-  bigBox->rotation = 1.4;
-  bigBox->restitution = 0.5;
-  bodies.push_back(bigBox);
+  Body* bigBall = new Body(CircleShape(200), Graphics::Width() / 2.0, Graphics::Height() / 2.0, 0.0);
+  bigBall->rotation = 1.4;
+  bigBall->restitution = 0.5;
+  bodies.push_back(bigBall);
 
 }
 void Application::Input()
@@ -38,8 +45,10 @@ void Application::Input()
     case SDL_MOUSEBUTTONDOWN:
       int x, y;
       SDL_GetMouseState(&x, &y);
-      Body* box = new Body(BoxShape(50, 50), x, y, 1.0);
-      bodies.push_back(box);
+      // Body* box = new Body(BoxShape(50, 50), x, y, 1.0);
+      // bodies.push_back(box);
+      Body* ball = new Body(CircleShape(50), x, y, 1.0);
+      bodies.push_back(ball);
       break;
     }
   }
@@ -177,7 +186,7 @@ void Application::Render()
     if (body->shape->GetType() == CIRCLE)
     {
       CircleShape *circleShape = (CircleShape *)body->shape;
-      Graphics::DrawFillCircle(body->position.x, body->position.y, circleShape->radius, color);
+      Graphics::DrawCircle(body->position.x, body->position.y, circleShape->radius, body->rotation, color);
     } else if (body->shape->GetType() == BOX)
     {
       BoxShape *boxShape = (BoxShape *)body->shape;
