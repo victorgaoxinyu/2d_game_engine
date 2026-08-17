@@ -17,6 +17,7 @@ bool CollisionDetection::IsColliding(Body* a, Body* b, Contact& contact) {
     if (aIsPolygon && bIsPolygon) {
         return IsCollidingPolygonPolygon(a, b, contact);
     }
+    // TODO: check circle with polygon collision
 
     return false;
 };

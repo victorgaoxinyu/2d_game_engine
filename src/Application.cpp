@@ -122,59 +122,7 @@ void Application::Update()
     }
     
   }
-  
 
-  for (auto body : bodies)
-  {
-    if (body->shape->GetType() == CIRCLE)
-    {
-      CircleShape *circleShape = (CircleShape *)body->shape;
-      // check body position, limit and keep the body inside of window...
-      if (body->position.x - circleShape->radius <= 0)
-      {
-        body->position.x = circleShape->radius;
-        body->velocity.x *= -0.9; // 0.9 for energy loss
-      }
-      else if (body->position.x + circleShape->radius >= Graphics::Width())
-      {
-        body->position.x = Graphics::Width() - circleShape->radius;
-        body->velocity.x *= -0.9;
-      }
-      else if (body->position.y - circleShape->radius <= 0)
-      {
-        body->position.y = circleShape->radius;
-        body->velocity.y *= -0.9;
-      }
-      else if (body->position.y + circleShape->radius >= Graphics::Height())
-      {
-        body->position.y = Graphics::Height() - circleShape->radius;
-        body->velocity.y *= -0.9;
-      }
-    } else if (body->shape->GetType() == BOX)
-    {
-      BoxShape *boxShape = (BoxShape *)body->shape;
-      if (body->position.x - boxShape->width / 2 <= 0)
-      {
-        body->position.x = boxShape->width / 2;
-        body->velocity.x *= -0.9;
-      }
-      else if (body->position.x + boxShape->width / 2 >= Graphics::Width())
-      {
-        body->position.x = Graphics::Width() - boxShape->width / 2;
-        body->velocity.x *= -0.9;
-      }
-      else if (body->position.y - boxShape->height / 2 <= 0)
-      {
-        body->position.y = boxShape->height / 2;
-        body->velocity.y *= -0.9;
-      }
-      else if (body->position.y + boxShape->height / 2 >= Graphics::Height())
-      {
-        body->position.y = Graphics::Height() - boxShape->height / 2;
-        body->velocity.y *= -0.9;
-      }
-    }
-  }
 }
 
 void Application::Render()
