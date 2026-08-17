@@ -552,3 +552,76 @@ for (va: a->vertices) {
 
 return separation
 ```
+
+#### Finding extra collision information with SAT
+```cpp
+contact.depth = -separation
+contact.normal = edge.normal
+```
+
+# Angular Collision Resolution
+## Linear & Angular Velocity at point
+
+Two impulses
+- linear impulse
+- angular impulse
+
+with rotation, the linear velocity at a position p will be different from velocity
+at the center of mass, and depends on where p is located
+```
+v = omega x r  // cross product
+```
+
+## Finding the Velocity Post-Collision at Point of Impact 
+
+Impulse Method + Rotation
+- need to consider linear velocity **at** the point of impact p
+- point velocity = center of mass velocity + portion caused by rotation
+  - `Va = v_center_of_mass + (omega_a x r_a)`
+
+Post-impulse linear
+- `va' = va - (J * n_norm) / m_a`
+- `vb' = vb + (J * n_norm) / m_b`
+
+Post-impulse angular
+- `omega_a' = omega_a - (r_a x J * n_norm) / I_a`
+- `omega_b' = omega_b + (r_b x J * n_norm) / I_b`
+
+Post-impulse velocity
+- `Va' = va' + omega_a' x r_a`
+- `Va' = va - (J * n_norm) / m_a + omega_a x r_a - ((r_a x J * n_norm) / I_a) x r_a`
+- `Va' = (va + omega_a x r_a) - (J * n_norm) / m_a - ((r_a x J * n_norm) / I_a) x r_a`
+- `Va' = Va - (J * n_norm) / m_a - J * ((r_a x n_norm) / I_a) x r_a`
+
+For b
+- `Vb' = Vb + (J * n_norm) / m_b + J * ((r_b x n_norm) / I_b) x r_b`
+
+
+## Calculating the Magnitude of the Impulse J (Linear & Angular)
+
+- `v_rel_prime * normal = - * e * v_rel * normal`
+- `(Va' - Vb') * normal = - * e * v_rel * normal`
+
+a lot of algebra
+![Impulse_linear_angular](pics/impulse_linear_angular.png)
+
+
+## Cross product in 2D
+Cross product between `omega` and `r`, in our engine, `omega` is a scalar value
+
+![cross_product_for_2d](pics/cross_product_for_2d.png)
+
+// add cross product simplification here
+
+2D cross product will be the scalar magnitude of z-component to the result perpendicular vector
+```
+A cross B = AxBy - AyBx
+```
+
+Triple scalar product rule
+`(AxB) * C = (BxC) * A`
+
+
+Simplication of Impulse J
+// put result here
+
