@@ -15,21 +15,18 @@ void Application::Setup()
   Body* leftWall = new Body(BoxShape(50, Graphics::Height() - 100), 50, Graphics::Height() / 2.0 - 25, 0.0);
   Body* rightWall = new Body(BoxShape(50, Graphics::Height() - 100), Graphics::Width() - 50, Graphics::Height() / 2.0 - 25, 0.0);
   
-  floor->restitution = 0.2;
+  floor->restitution = 0.5;
   leftWall->restitution = 0.2;
   rightWall->restitution = 0.2;
-  // bodies.push_back(floor);
-  // bodies.push_back(leftWall);
-  // bodies.push_back(rightWall);
+  bodies.push_back(floor);
+  bodies.push_back(leftWall);
+  bodies.push_back(rightWall);
 
   Body* bigBox = new Body(BoxShape(200, 200), Graphics::Width() / 2.0, Graphics::Height() / 2.0, 0.0);
   bigBox->rotation = 1.4;
-  bigBox->restitution = 0.1;
+  bigBox->restitution = 0.7;
   bodies.push_back(bigBox);
 
-  Body* ball = new Body(CircleShape(50), Graphics::Width() / 2.0, Graphics::Height() / 2.0, 1.0);
-  ball->restitution = 0.1;
-  bodies.push_back(ball);
 
 }
 void Application::Input()
@@ -45,22 +42,26 @@ void Application::Input()
     case SDL_KEYDOWN:
       if (event.key.keysym.sym == SDLK_ESCAPE)
         running = false;
+      if (event.key.keysym.sym == SDLK_d)
+        debug = !debug;
       break;
-    // case SDL_MOUSEBUTTONDOWN:
-    //   int x, y;
-    //   SDL_GetMouseState(&x, &y);
-    //   Body* box = new Body(BoxShape(50, 50), x, y, 1.0);
-    //   box->restitution = 0.2;
-    //   bodies.push_back(box);
-    //   // Body* ball = new Body(CircleShape(50), x, y, 1.0);
-    //   // bodies.push_back(ball);
-    //   break;
-    case SDL_MOUSEMOTION:
+    case SDL_MOUSEBUTTONDOWN:
       int x, y;
       SDL_GetMouseState(&x, &y);
-      bodies[1]->position.x = x;
-      bodies[1]->position.y = y;
+      // Body* box = new Body(BoxShape(50, 50), x, y, 1.0);
+      // box->restitution = 0.2;
+      // bodies.push_back(box);
+      Body* ball = new Body(CircleShape(20), x, y, 1.0);
+      ball->restitution = 0.5;
+      ball->friction = 0.4;
+      bodies.push_back(ball);
       break;
+    // case SDL_MOUSEMOTION:
+    //   int x, y;
+    //   SDL_GetMouseState(&x, &y);
+    //   bodies[1]->position.x = x;
+    //   bodies[1]->position.y = y;
+    //   break;
     }
   }
 }
@@ -85,18 +86,18 @@ void Application::Update()
   timePreviousFrame = SDL_GetTicks();
 
 
-  // // Apply forces to the bodies
-  // for (auto body : bodies)
-  // {
-  //   // // Add weight
-  //   Vec2 weight = Vec2(0.0, 9.8 * body->mass * PIXELS_PER_METER);
-  //   body->AddForce(weight);
+  // Apply forces to the bodies
+  for (auto body : bodies)
+  {
+    // // Add weight
+    Vec2 weight = Vec2(0.0, 9.8 * body->mass * PIXELS_PER_METER);
+    body->AddForce(weight);
 
-  // //   // Add windForce
-  // //   Vec2 wind = Vec2(2.0 * PIXELS_PER_METER, 0.0);
-  // //   body->AddForce(wind);
+  //   // Add windForce
+  //   Vec2 wind = Vec2(2.0 * PIXELS_PER_METER, 0.0);
+  //   body->AddForce(wind);
 
-  // }
+  }
 
   for (auto body : bodies)
   {
@@ -120,14 +121,17 @@ void Application::Update()
       if (CollisionDetection::IsColliding(a, b, contact))
       {
 
-        // contact.ResolveCollision();
+        contact.ResolveCollision();
 
-        Graphics::DrawFillCircle(contact.start.x, contact.start.y, 5, 0xFFFF0000);
-        Graphics::DrawFillCircle(contact.end.x, contact.end.y, 5, 0xFF00FF00);
-        Graphics::DrawLine(contact.start.x, contact.start.y, contact.end.x, contact.end.y, 0xFFFFFFFF);
+        // Draw debug contact information
+        if (debug) {
+          Graphics::DrawFillCircle(contact.start.x, contact.start.y, 5, 0xFFFF0000);
+          Graphics::DrawFillCircle(contact.end.x, contact.end.y, 5, 0xFF00FF00);
+          Graphics::DrawLine(contact.start.x, contact.start.y, contact.end.x, contact.end.y, 0xFFFFFFFF);
 
-        a->isColliding = true;
-        b->isColliding = true;
+          a->isColliding = true;
+          b->isColliding = true;
+        }
       }
     }
     

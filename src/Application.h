@@ -7,6 +7,7 @@
 
 class Application {
 private:
+  bool debug = false;
   bool running = false;
   bool leftMouseButtonDown = false;
 
