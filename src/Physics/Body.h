@@ -3,6 +3,9 @@
 
 #include "Shape.h"
 #include "Vec2.h"
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+
 
 struct Body
 {
@@ -36,6 +39,9 @@ struct Body
   // a pointer to the geometry shape of the rigid body
   Shape *shape = nullptr;
 
+  // a pointer to SDL texture
+  SDL_Texture * texture = nullptr;
+
   Body(const Shape &shape, float x, float y, float mass);
   ~Body();
 
@@ -45,6 +51,9 @@ struct Body
   void AddTorque(float torque);
   void ClearForces();
   void ClearTorque();
+
+  // Texture
+  void SetTexture(const char* textureFileName);
 
   // Integration
   void Update(float dt);

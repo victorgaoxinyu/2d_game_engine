@@ -30,6 +30,11 @@ ShapeType CircleShape::GetType() const { return CIRCLE; }
 
 PolygonShape::PolygonShape(const std::vector<Vec2> vertices)
 {
+  // init vertices of polygon shape
+  for (auto vertex: vertices) {
+    localVertices.push_back(vertex);
+    worldVertices.push_back(vertex);
+  }
   std::cout << "PolygonShape constructor called!" << std::endl;
 };
 
@@ -48,7 +53,7 @@ ShapeType PolygonShape::GetType() const { return POLYGON; }
 float PolygonShape::GetMomentOfInertia() const
 {
   // TODO:
-  return 0.0;
+  return 5000;
 };
 
 Vec2 PolygonShape::EdgeAt(int index) const {
@@ -59,7 +64,6 @@ Vec2 PolygonShape::EdgeAt(int index) const {
 }
 
 float PolygonShape::FindMinSeparation(const PolygonShape* other, Vec2& axis, Vec2& point) const {
-    // TODO:
     // loop all vertices of "this" polygon
     //   find normal axis
     //   loop all vertices of "other" polygon
@@ -122,12 +126,12 @@ BoxShape::BoxShape(float width, float height)
   worldVertices.push_back(Vec2(+width / 2.0, +height / 2.0));
   worldVertices.push_back(Vec2(-width / 2.0, +height / 2.0));
 
-  std::cout << "PolygonShape constructor called!" << std::endl;
+  std::cout << "BoxShape constructor called!" << std::endl;
 };
 
 BoxShape::~BoxShape()
 {
-  std::cout << "PolygonShape destructor called!" << std::endl;
+  std::cout << "BoxShape destructor called!" << std::endl;
 };
 
 Shape *BoxShape::Clone() const

@@ -1,3 +1,4 @@
+#include "../Graphics.h"
 #include "Body.h"
 #include <iostream>
 #include <math.h>
@@ -107,6 +108,16 @@ void Body::Update(float dt)
     polygonShape->UpdateVertices(rotation, position);
   }
 }
+
+
+void Body::SetTexture(const char* textureFileName) {
+  SDL_Surface *surface = IMG_Load(textureFileName);
+  if (surface) {
+    texture = SDL_CreateTextureFromSurface(Graphics::renderer, surface);
+    SDL_FreeSurface(surface);
+  }
+}
+
 
 bool Body::IsStatic() const {
   // return invMass == 0.0;  // Note: this will cause float number issue 
